@@ -1,4 +1,4 @@
-import { run, numericalSort } from '../utils/utils.ts';
+import { run } from '../utils/utils.ts';
 
 type Report = {
   levels: number[];
