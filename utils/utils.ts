@@ -10,8 +10,8 @@ export const getInput = async (): Promise<string[]> => {
 
 type RunParams<T> = {
   parseLines: (lines: string[]) => T,
-  part1: (data: T) => number,
-  part2: (data: T) => number,
+  part1: (data: T) => number | bigint,
+  part2: (data: T) => number | bigint,
 };
 export async function run<T>(params: RunParams<T>): Promise<void> {
   const { parseLines, part1, part2 } = params;
