@@ -27,3 +27,17 @@ export async function run<T>(params: RunParams<T>): Promise<void> {
 export const numericalSort = (array: number[]): void => {
   array.sort((a, b) => a - b);
 };
+
+export const gcd = (a: number, b: number): number => {
+  if (b === 0) {
+    return a
+  }
+  
+  return gcd(b, a % b)
+};
+
+export type Vec2 = [number, number];
+
+export const isInBounds = (p: Vec2, bounds: Vec2): boolean => {
+  return !(p[0] < 0 || p[0] >= bounds[0] || p[1] < 0 || p[1] >= bounds[1])
+};
