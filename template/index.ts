@@ -8,6 +8,7 @@ const parseLines = (lines: string[]): DataStruct => {
 };
 
 const part1 = (data: DataStruct): number => {
+  console.log(data);
   return 1;
 };
 
