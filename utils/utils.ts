@@ -41,3 +41,5 @@ export type Vec2 = [number, number];
 export const isInBounds = (p: Vec2, bounds: Vec2): boolean => {
   return !(p[0] < 0 || p[0] >= bounds[0] || p[1] < 0 || p[1] >= bounds[1])
 };
+
+export const isInt = (x: number): boolean => Math.round(x) === x;
