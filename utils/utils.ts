@@ -43,3 +43,33 @@ export const isInBounds = (p: Vec2, bounds: Vec2): boolean => {
 };
 
 export const isInt = (x: number): boolean => Math.round(x) === x;
+
+export enum DIRECTION {
+  UP = 1 << 1,
+  DOWN = 1 << 2,
+  LEFT = 1 << 3,
+  RIGHT = 1 << 4,
+};
+
+export const getNextPosition = (p: Vec2, dir: DIRECTION): Vec2 => {
+  const nextPosition: Vec2 = [p[0], p[1]];
+  switch (dir) {
+    case DIRECTION.UP:
+      nextPosition[0] -= 1;
+      break;
+    case DIRECTION.DOWN:
+      nextPosition[0] += 1;
+      break;
+    case DIRECTION.LEFT:
+      nextPosition[1] -= 1;
+      break;
+    case DIRECTION.RIGHT:
+      nextPosition[1] += 1;
+      break;
+  }
+  return nextPosition;
+};
+
+export const rowColGet = <T>(map: T[][], p: Vec2): T => {
+  return map[p[0]][p[1]];
+};

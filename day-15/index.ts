@@ -1,20 +1,12 @@
-import { run, Vec2 } from '../utils/utils.ts';
+import { DIRECTION, getNextPosition, rowColGet, run, Vec2 } from '../utils/utils.ts';
 
 const FLAGS = {
   BOX: 1 << 0,
   WALL: 1 << 1,
 };
 
-enum DIRECTION {
-  UP = 1 << 3,
-  DOWN = 1 << 4,
-  LEFT = 1 << 5,
-  RIGHT = 1 << 6,
-};
-
 type DataStruct = {
   map: number[][],
-  size: Vec2,
   robot: Vec2,
   instructions: DIRECTION[],
 };
@@ -69,46 +61,26 @@ const parseLines = (lines: string[]): DataStruct => {
 
   return {
     map,
-    size: [map[0].length, map.length],
     instructions,
     robot,
   };
 };
 
-const getNextPosition = (p: Vec2, facing: DIRECTION): [number, number] => {
-  const nextPosition: Vec2 = [p[0], p[1]];
-  switch (facing) {
-    case DIRECTION.UP:
-      nextPosition[0] -= 1;
-      break;
-    case DIRECTION.DOWN:
-      nextPosition[0] += 1;
-      break;
-    case DIRECTION.LEFT:
-      nextPosition[1] -= 1;
-      break;
-    case DIRECTION.RIGHT:
-      nextPosition[1] += 1;
-      break;
-  }
-  return nextPosition;
-};
-
 const apply = (map: number[][], robot: Vec2, direction: DIRECTION) => {
   const nextP = getNextPosition(robot, direction);
 
-  switch (map[nextP[0]][nextP[1]]) {
+  switch (rowColGet(map, nextP)) {
     case FLAGS.WALL:
       break; // We're blocked, do nothing
     case FLAGS.BOX: {
       // Try to push box(es)
       let endOfChain = nextP;
-      while (map[endOfChain[0]][endOfChain[1]] === FLAGS.BOX) {
+      while (rowColGet(map, endOfChain) === FLAGS.BOX) {
         endOfChain = getNextPosition(endOfChain, direction);
       }
 
       // Move everything one square
-      if (map[endOfChain[0]][endOfChain[1]] === 0) {
+      if (rowColGet(map, endOfChain) === 0) {
         map[nextP[0]][nextP[1]] = 0; // No longer occupied
         map[endOfChain[0]][endOfChain[1]] = FLAGS.BOX;
         // Update robot
@@ -141,7 +113,7 @@ const printMap = (map: number[][], robot: Vec2) => {
 };
 
 const isLeftBoxCoord = (map: number[][], box: Vec2): boolean => {
-  const c = map[box[0]][box[1]];
+  const c = rowColGet(map, box);
   if (c !== FLAGS.BOX) {
     console.log(box);
     printMap(map, [0, 0]);
@@ -149,7 +121,7 @@ const isLeftBoxCoord = (map: number[][], box: Vec2): boolean => {
   }
 
   let endOfChain = getNextPosition(box, DIRECTION.LEFT);
-  while (map[endOfChain[0]][endOfChain[1]] === FLAGS.BOX) {
+  while (rowColGet(map, endOfChain) === FLAGS.BOX) {
     endOfChain = getNextPosition(endOfChain, DIRECTION.LEFT);
   }
 
@@ -197,8 +169,8 @@ const makeDoubleWidth = (map: number[][]): number[][] => {
 const canMoveBox = (map: number[][], boxLeft: Vec2, dir: DIRECTION.UP | DIRECTION.DOWN): boolean => {
   const nextPL = getNextPosition(boxLeft, dir);
   const nextPR = getNextPosition([boxLeft[0], boxLeft[1] + 1], dir);
-  const nextLC = map[nextPL[0]][nextPL[1]];
-  const nextRC = map[nextPR[0]][nextPR[1]];
+  const nextLC = rowColGet(map, nextPL);
+  const nextRC = rowColGet(map, nextPR);
 
   // Have we hit a wall?
   if (nextLC === FLAGS.WALL || nextRC === FLAGS.WALL) {
@@ -223,7 +195,7 @@ const canMoveBox = (map: number[][], boxLeft: Vec2, dir: DIRECTION.UP | DIRECTIO
 const moveBox = (map: number[][], boxLeft: Vec2, dir: DIRECTION.UP | DIRECTION.DOWN) => {
   const nextPL = getNextPosition(boxLeft, dir);
   const nextPR = getNextPosition([boxLeft[0], boxLeft[1] + 1], dir);
-  const nextLC = map[nextPL[0]][nextPL[1]];
+  const nextLC = rowColGet(map, nextPL);
 
   // Left side
   if (nextLC === FLAGS.BOX) {
@@ -232,7 +204,7 @@ const moveBox = (map: number[][], boxLeft: Vec2, dir: DIRECTION.UP | DIRECTION.D
   }
   
   // Right side
-  const nextRC = map[nextPR[0]][nextPR[1]];
+  const nextRC = rowColGet(map, nextPR);
   if (nextRC === FLAGS.BOX) {
     // Move the box ahead of us
     moveBox(map, [nextPR[0], isLeftBoxCoord(map, nextPR) ? nextPR[1] : nextPR[1] - 1], dir);
@@ -253,7 +225,7 @@ const applyDoubleWide = (map: number[][], robot: Vec2, dir: DIRECTION) => {
   }
 
   const nextP = getNextPosition(robot, dir);
-  switch (map[nextP[0]][nextP[1]]) {
+  switch (rowColGet(map, nextP)) {
     case FLAGS.BOX: {
       // We're going up/down. This is more complicated...
       const isLeftCoord = isLeftBoxCoord(map, nextP);
