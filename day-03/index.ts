@@ -1,10 +1,5 @@
 import { run } from '../utils/utils.ts';
 
-type Mul = {
-  X: number,
-  Y: number,
-};
-
 type DataStruct = {
   chars: string[],
 };
