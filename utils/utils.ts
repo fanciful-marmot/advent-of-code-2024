@@ -38,6 +38,8 @@ export const gcd = (a: number, b: number): number => {
 
 export type Vec2 = [number, number];
 
+export const v2Eq = (v: Vec2, w: Vec2): boolean => v[0] === w[0] && v[1] === w[1];
+
 export const isInBounds = (p: Vec2, bounds: Vec2): boolean => {
   return !(p[0] < 0 || p[0] >= bounds[0] || p[1] < 0 || p[1] >= bounds[1])
 };
@@ -45,10 +47,10 @@ export const isInBounds = (p: Vec2, bounds: Vec2): boolean => {
 export const isInt = (x: number): boolean => Math.round(x) === x;
 
 export enum DIRECTION {
-  UP = 1 << 1,
-  DOWN = 1 << 2,
-  LEFT = 1 << 3,
-  RIGHT = 1 << 4,
+  UP = 1 << 0,
+  DOWN = 1 << 1,
+  LEFT = 1 << 2,
+  RIGHT = 1 << 3,
 };
 
 export const getNextPosition = (p: Vec2, dir: DIRECTION): Vec2 => {
