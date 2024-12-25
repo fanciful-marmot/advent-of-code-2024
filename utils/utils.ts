@@ -10,8 +10,8 @@ export const getInput = async (): Promise<string[]> => {
 
 type RunParams<T> = {
   parseLines: (lines: string[]) => T,
-  part1: (data: T) => number | bigint,
-  part2: (data: T) => number | bigint,
+  part1: (data: T) => number | bigint | string,
+  part2: (data: T) => number | bigint | string,
 };
 export async function run<T>(params: RunParams<T>): Promise<void> {
   const { parseLines, part1, part2 } = params;
@@ -74,4 +74,8 @@ export const getNextPosition = (p: Vec2, dir: DIRECTION): Vec2 => {
 
 export const rowColGet = <T>(map: T[][], p: Vec2): T => {
   return map[p[0]][p[1]];
+};
+
+export const numArrayEq = (a1: number[], a2: number[]): boolean => {
+  return a1.length === a2.length && a1.every((a, i) => a2[i] === a);
 };
