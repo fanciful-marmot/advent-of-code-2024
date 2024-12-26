@@ -1,4 +1,4 @@
-import { numArrayEq, run } from '../utils/utils.ts';
+import { run } from '../utils/utils.ts';
 
 enum OpCode {
   ADV = 0,

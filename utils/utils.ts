@@ -76,6 +76,8 @@ export const rowColGet = <T>(map: T[][], p: Vec2): T => {
   return map[p[0]][p[1]];
 };
 
+export const vec2ToString = (v: Vec2) => `${v[0]},${v[1]}`;
+
 export const numArrayEq = (a1: number[], a2: number[]): boolean => {
   return a1.length === a2.length && a1.every((a, i) => a2[i] === a);
 };
