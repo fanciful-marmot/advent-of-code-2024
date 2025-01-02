@@ -53,6 +53,15 @@ export enum DIRECTION {
   RIGHT = 1 << 3,
 };
 
+export const dirToString = (d: DIRECTION): string => {
+  switch (d) {
+    case DIRECTION.UP: return '^';
+    case DIRECTION.DOWN: return 'v';
+    case DIRECTION.LEFT: return '<';
+    case DIRECTION.RIGHT: return '>';
+  }
+};
+
 export const getNextPosition = (p: Vec2, dir: DIRECTION): Vec2 => {
   const nextPosition: Vec2 = [p[0], p[1]];
   switch (dir) {
